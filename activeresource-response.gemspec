@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.version     = ActiveresourceResponse::VERSION
   s.authors     = ["Igor Fedoronchuk"]
   s.email       = ["fedoronchuk@gmail.com"]
-  s.homepage    = ""
+  s.homepage    = "https://github.com/Fivell/activeresource-response"
   s.summary     = %q{activeresoure extension}
   s.description = %q{create method for ActiveResource::Base object to access to response }
 
