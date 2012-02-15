@@ -16,35 +16,35 @@ Rest Client
 
   class Order < ActiveResource::Base
     self.format = :json
-  	self.site = 'http://0.0.0.0:3000/'
-  	self.element_name = "order" 
-  	add_response_method :http_response  # our new method
+    self.site = 'http://0.0.0.0:3000/'
+    self.element_name = "order" 
+    add_response_method :http_response  # our new method
   end
 
 Server Side
 
   class OrdersController < ApplicationController
-  		def index
-    		@orders = Order.page(params[:page]).per(params[:per_page])
-    		response.headers["X-total"] = @orders.total_count.to_s
-    		response.headers["X-offset"] = @orders.offset_value.to_s
-    		response.headers["X-limit"] = @orders.limit_value.to_s
-    		respond_with(@orders)
-  		end
+    def index
+      @orders = Order.page(params[:page]).per(params[:per_page])
+      response.headers["X-total"] = @orders.total_count.to_s
+      response.headers["X-offset"] = @orders.offset_value.to_s
+      response.headers["X-limit"] = @orders.limit_value.to_s
+      respond_with(@orders)
+    end
   end
 
 Client Side
 
   class OrdersController < ApplicationController
-		def index
-     		orders = Order.all(:params=>params)     
-     		@orders = Kaminari::PaginatableArray.new(
-           		orders,{
-             		:limit => orders.http_response['X-limit'].to_i,
-             		:offset =>orders.http_response['X-offset'].to_i,
-             		:total_count => orders.http_response['X-total'].to_i
-           		}) 
-   		end
+    def index
+      orders = Order.all(:params=>params)     
+      @orders = Kaminari::PaginatableArray.new(
+        orders,{
+                :limit => orders.http_response['X-limit'].to_i,
+             	:offset =>orders.http_response['X-offset'].to_i,
+             	:total_count => orders.http_response['X-total'].to_i
+        }) 
+    end
   end
 
 
