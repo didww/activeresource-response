@@ -42,4 +42,5 @@ class OrdersController < ApplicationController
              :total_count => orders.http_response['X-total'].to_i
            }   
        ) 
+   end
 end
