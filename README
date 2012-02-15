@@ -33,7 +33,7 @@ end
 class OrdersController < ApplicationController
 
   def index
-     orders = Didww::SupplierOrder.all(:params=>params)     
+     orders = Order.all(:params=>params)     
      @orders = Kaminari::PaginatableArray.new(
            orders,
            {
