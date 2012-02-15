@@ -8,10 +8,7 @@ Such functionallity can be used for easily implementing pagination in a REST API
 == How to use?
 Just open your ActiveResource class and add 
  
-	add_response_method :your_method_name
-
-
-
+  add_response_method :your_method_name
 
 == Full example of usage with kaminari gem
 
@@ -24,7 +21,7 @@ Rest Client
   		add_response_method :http_response  # our new method
 	end
 
-== Server Side
+Server Side
 
 	class OrdersController < ApplicationController
   		def index
@@ -36,8 +33,7 @@ Rest Client
   		end
 	end
 
-
-== Client Side
+Client Side
 
 	class OrdersController < ApplicationController
 		def index
