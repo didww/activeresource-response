@@ -1,3 +1,5 @@
 module ActiveresourceResponse
-  VERSION = "0.0.3"
+  module Version
+    VERSION = "0.0.4"
+  end
 end

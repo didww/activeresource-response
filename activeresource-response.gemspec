@@ -4,7 +4,7 @@ require "activeresource-response/version"
 
 Gem::Specification.new do |s|
   s.name        = "activeresource-response"
-  s.version     = ActiveresourceResponse::VERSION
+  s.version     = ActiveresourceResponse::Version::VERSION
   s.authors     = ["Igor Fedoronchuk"]
   s.email       = ["fedoronchuk@gmail.com"]
   s.homepage    = "https://github.com/Fivell/activeresource-response"
