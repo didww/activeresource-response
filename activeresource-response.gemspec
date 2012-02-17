@@ -8,11 +8,11 @@ Gem::Specification.new do |s|
   s.authors     = ["Igor Fedoronchuk"]
   s.email       = ["fedoronchuk@gmail.com"]
   s.homepage    = "https://github.com/Fivell/activeresource-response"
-  s.summary     = %q{activeresoure extension}
-  s.description = %q{adding possibility to access http response object from result of activeresource call  }
+  s.summary     = %q{activeresource extension}
+  s.description = %q{This gem adds possibility to access http response object from result of activeresource call (see ActiveResource::Base.find) }
 
 
-  s.add_dependency('activeresource', '>= 3.1')
+  s.add_dependency('activeresource', '>= 3.0')
 
   s.rubyforge_project = "activeresource-response"
 
