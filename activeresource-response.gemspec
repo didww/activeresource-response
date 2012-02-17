@@ -9,7 +9,7 @@ Gem::Specification.new do |s|
   s.email       = ["fedoronchuk@gmail.com"]
   s.homepage    = "https://github.com/Fivell/activeresource-response"
   s.summary     = %q{activeresource extension}
-  s.description = %q{This gem adds possibility to access http response object from result of activeresource call (see ActiveResource::Base.find) }
+  s.description = %q{This gem adds possibility to access http response object from result of ActiveResource::Base find method }
 
 
   s.add_dependency('activeresource', '>= 3.0')
