@@ -54,7 +54,7 @@ Client Side
   end
 
 
-== Gem also creates http_response method for ActiveResource::Connection class
+== Gem also creates http_response method for ActiveResource::Connection class (no matter if find method was called or one of custom methods, which invokes http connection)
 Example
 
   class Order < ActiveResource::Base
@@ -69,7 +69,7 @@ Example
   # => "3831" 
   first_order.my_response['content-length'] 
   #=> "260"
-  #connection has last http response object , to access it use http_response method
+  #connection also always has last http response object , to access it use http_response method
   Order.connection.http_response.to_hash
   # => {"content-type"=>["application/json; charset=utf-8"], "x-ua-compatible"=>["IE=Edge"], "etag"=>["\"573cabd02b2f1f90405f7f4f77995fab\""], "cache-control"=>["max-age=0, private, must-revalidate"], "x-request-id"=>["2911c13a0c781044c474450ed789613d"], "x-runtime"=>["0.071018"], "content-length"=>["260"], "server"=>["WEBrick/1.3.1 (Ruby/1.9.2/2011-02-18)"], "date"=>["Sun, 19 Feb 2012 10:21:29 GMT"], "connection"=>["close"]} 
   
