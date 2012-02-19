@@ -78,3 +78,8 @@ Example
 == About Http response 
 http response is object of Net::HTTPOK, Net::HTTPClientError or one of other subclasses
 of Net::HTTPResponse class. For more information see documentation  http://www.ruby-doc.org/stdlib-1.9.3/libdoc/net/http/rdoc/Net/HTTPResponse.html
+
+
+== Inspirators
+http://phpblog.com.ua/2012/01/rails-activeresource-i-zagolovki/
+http://stackoverflow.com/questions/5972429/active-resource-responses-how-to-get-them
