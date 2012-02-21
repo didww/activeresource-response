@@ -10,7 +10,7 @@ Such functionallity can be used for easily implementing pagination in a REST API
 == How to use?
 Add dependency to your Gemfile
 
-  gem "activeresource-response", "~> 0.0.5"
+  gem "activeresource-response", "~> 0.0.6"
 
 Just open your ActiveResource class and add 
  
