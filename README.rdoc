@@ -12,9 +12,16 @@ Add dependency to your Gemfile
 
   gem "activeresource-response", "~> 0.0.6"
 
-Just open your ActiveResource class and add 
+Just open your ActiveResource class  and add 
  
   add_response_method :your_method_name
+
+You can add method to ActiveResource::Base to use it in all subclasses
+
+  class ActiveResource::Base
+    add_response_method :my_response  
+  end
+
 
 == Full example of usage with kaminari gem
 
