@@ -10,7 +10,7 @@ Such functionallity can be used for easily implementing pagination in a REST API
 == How to use?
 Add dependency to your Gemfile
 
-  gem "activeresource-response", "~> 0.0.6"
+  gem "activeresource-response", "~> 0.0.7"
 
 Just open your ActiveResource class  and add 
  
@@ -31,7 +31,7 @@ Rest Client
     self.format = :json
     self.site = 'http://0.0.0.0:3000/'
     self.element_name = "order" 
-    add_response_method :http_response  # our new method
+    add_response_method :http_response  # our new method for returned objects 
   end
 
 Server Side
