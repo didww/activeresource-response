@@ -23,6 +23,13 @@ You can add method to ActiveResource::Base to use it in all subclasses
   end
 
 
+You can remove method from ActiveResource subclass
+
+  class Order < ActiveResource::Base
+    remove_response_method  
+  end
+
+
 == Full example of usage with kaminari gem
 
 Rest Client
