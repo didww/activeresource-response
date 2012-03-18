@@ -1,6 +1,6 @@
 = Activeresource-response
 
-This gem adds possibility to access http response object from result (single object or collection) of activeresource call (methods : find, all, first, last )
+This gem adds possibility to access http response object from result (single object or collection) of activeresource call (methods : find, all, first, last, get )
 
 
 
