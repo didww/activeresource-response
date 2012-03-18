@@ -92,3 +92,6 @@ of Net::HTTPResponse class. For more information see documentation  http://www.r
 http://phpblog.com.ua/2012/01/rails-activeresource-i-zagolovki/
 
 http://stackoverflow.com/questions/5972429/active-resource-responses-how-to-get-them
+
+
+== Please, feel free to contact me if you have any questions
