@@ -60,8 +60,8 @@ Client Side
     end
   end
 
-
-== Gem also creates http_response method for ActiveResource::Connection class (no matter if find method was called or one of custom methods, which invokes http connection)
+ 
+== Every time when http connection invoked ActiveResource connection object  stores http response. You can access it with http_response method. 
 Example
 
   class Order < ActiveResource::Base
