@@ -92,8 +92,12 @@ Example
   end
   countries = Country.all
   countries.my_response.headers
+
+ # => {:content_type=>["application/json; charset=utf-8"], :x_ua_compatible=>["IE=Edge"], ..., :set_cookie=>["bar=foo; path=/", "foo=bar; path=/"]} 
+
+
   countries.my_response.cookies
-  
+ # => {:bar=>"foo", :foo=>"bar"}   
   
 == About Http response 
 http response is object of Net::HTTPOK, Net::HTTPClientError or one of other subclasses
