@@ -80,6 +80,19 @@ Example
   Order.connection.http_response.to_hash
   # => {"content-type"=>["application/json; charset=utf-8"], "x-ua-compatible"=>["IE=Edge"], "etag"=>["\"573cabd02b2f1f90405f7f4f77995fab\""], "cache-control"=>["max-age=0, private, must-revalidate"], "x-request-id"=>["2911c13a0c781044c474450ed789613d"], "x-runtime"=>["0.071018"], "content-length"=>["260"], "server"=>["WEBrick/1.3.1 (Ruby/1.9.2/2011-02-18)"], "date"=>["Sun, 19 Feb 2012 10:21:29 GMT"], "connection"=>["close"]} 
   
+
+
+== Headers and cookies methods to get symbolized collections 
+You can get cookies and headers from response 
+Example
+
+  class Country < ActiveResource::Base
+    self.site = 'http://0.0.0.0:3000/'
+    add_response_method :my_response  # our new method
+  end
+  countries = Country.all
+  countries.my_response.headers
+  countries.my_response.cookies
   
   
 == About Http response 
