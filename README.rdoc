@@ -10,7 +10,7 @@ Such functionallity can be used for easily implementing pagination in a REST API
 == How to use?
 Add dependency to your Gemfile
 
-  gem "activeresource-response", "~> 0.0.9"
+  gem "activeresource-response", "~> 0.1.0"
 
 Just open your ActiveResource class  and add 
  
@@ -82,7 +82,7 @@ Example
   
 
 
-== Headers and cookies methods to get symbolized collections 
+== Headers and cookies methods 
 You can get cookies and headers from response 
 Example
 
@@ -93,11 +93,11 @@ Example
   countries = Country.all
   countries.my_response.headers
 
- # => {:content_type=>["application/json; charset=utf-8"], :x_ua_compatible=>["IE=Edge"], ..., :set_cookie=>["bar=foo; path=/", "foo=bar; path=/"]} 
+ # collection with symbolized keys => {:content_type=>["application/json; charset=utf-8"], :x_ua_compatible=>["IE=Edge"], ..., :set_cookie=>["bar=foo; path=/", "foo=bar; path=/"]} 
 
 
   countries.my_response.cookies
- # => {:bar=>"foo", :foo=>"bar"}   
+ # => {"bar"=>"foo", "foo"=>"bar"}   
   
 == About Http response 
 http response is object of Net::HTTPOK, Net::HTTPClientError or one of other subclasses
@@ -112,3 +112,4 @@ http://stackoverflow.com/questions/5972429/active-resource-responses-how-to-get-
 
 
 == Please, feel free to contact me if you have any questions
+fedoronchuk(at)gmail.com

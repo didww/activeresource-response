@@ -5,13 +5,12 @@ module ActiveresourceResponse
        end
        def cookies
           unless @_active_resource_response_cookies
-             cookies   = (self.headers[:set_cookie] || {}).inject({}) do |out, cookie_str|    
+            @_active_resource_response_cookies    = (self.headers[:set_cookie] || {}).inject({}) do |out, cookie_str|    
                CGI::Cookie::parse(cookie_str).each do |key, cookie|  
                  out[key] = cookie.value.first unless ['expires', 'path'].include? key 
                end
                out
             end
-            @_active_resource_response_cookies = symbolize_keys(cookies)
           end  
           @_active_resource_response_cookies
        end
