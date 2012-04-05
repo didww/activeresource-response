@@ -16,10 +16,11 @@ Gem::Specification.new do |s|
   s.add_dependency('activeresource', '>= 3.0')
 
 
+  s.add_development_dependency 'rake'
 
   s.extra_rdoc_files = %w( README.rdoc )
   s.rdoc_options.concat ['--main', 'README.rdoc']
-
+   
 
   s.files         = `git ls-files | sed '/.gitignore/d'`.split("\n")
   s.test_files    = `git ls-files -- {test,spec,features}/*`.split("\n")
