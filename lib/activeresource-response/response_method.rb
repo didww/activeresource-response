@@ -9,7 +9,7 @@ module ActiveresourceResponse
     module ClassMethods
       def add_response_method(method_name = :http_response)
 
-        remove_response_method  if methods.include?(:find_without_http_response)
+        remove_response_method  if methods.map(&:to_sym).include?(:find_without_http_response)
         [:find, :get].each do |method| 
           instance_eval  <<-EOS
           alias #{method}_without_http_response #{method}
