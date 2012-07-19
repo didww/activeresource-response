@@ -1,6 +1,6 @@
 = Activeresource-response
 
-This gem adds possibility to access http response object from result (single object or collection) of activeresource call (methods : find, all, first, last )
+This gem adds possibility to access http response object from result (single object or collection) of activeresource call (methods : find, all, first, last, get )
 
 
 
@@ -10,7 +10,7 @@ Such functionallity can be used for easily implementing pagination in a REST API
 == How to use?
 Add dependency to your Gemfile
 
-  gem "activeresource-response", "~> 0.0.7"
+  gem "activeresource-response"
 
 Just open your ActiveResource class  and add 
  
@@ -67,8 +67,8 @@ Client Side
     end
   end
 
-
-== Gem also creates http_response method for ActiveResource::Connection class (no matter if find method was called or one of custom methods, which invokes http connection)
+ 
+== Every time when http connection invoked ActiveResource connection object  stores http response. You can access it with http_response method. 
 Example
 
   class Order < ActiveResource::Base
@@ -87,7 +87,24 @@ Example
   Order.connection.http_response.to_hash
   # => {"content-type"=>["application/json; charset=utf-8"], "x-ua-compatible"=>["IE=Edge"], "etag"=>["\"573cabd02b2f1f90405f7f4f77995fab\""], "cache-control"=>["max-age=0, private, must-revalidate"], "x-request-id"=>["2911c13a0c781044c474450ed789613d"], "x-runtime"=>["0.071018"], "content-length"=>["260"], "server"=>["WEBrick/1.3.1 (Ruby/1.9.2/2011-02-18)"], "date"=>["Sun, 19 Feb 2012 10:21:29 GMT"], "connection"=>["close"]} 
   
-  
+
+
+== Headers and cookies methods 
+You can get cookies and headers from response 
+Example
+
+  class Country < ActiveResource::Base
+    self.site = 'http://0.0.0.0:3000/'
+    add_response_method :my_response  # our new method
+  end
+  countries = Country.all
+  countries.my_response.headers
+
+ # collection with symbolized keys => {:content_type=>["application/json; charset=utf-8"], :x_ua_compatible=>["IE=Edge"], ..., :set_cookie=>["bar=foo; path=/", "foo=bar; path=/"]} 
+
+
+  countries.my_response.cookies
+ # => {"bar"=>"foo", "foo"=>"bar"}   
   
 == About Http response 
 http response is object of Net::HTTPOK, Net::HTTPClientError or one of other subclasses
@@ -99,3 +116,7 @@ of Net::HTTPResponse class. For more information see documentation  http://www.r
 http://phpblog.com.ua/2012/01/rails-activeresource-i-zagolovki/
 
 http://stackoverflow.com/questions/5972429/active-resource-responses-how-to-get-them
+
+
+== Please, feel free to contact me if you have any questions
+fedoronchuk(at)gmail.com
