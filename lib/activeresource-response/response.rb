@@ -1,4 +1,4 @@
-  module ActiveResourceResponse
+  module ActiveresourceResponse
     module Response
       def self.included(base)
         base.class_eval  do
