@@ -9,7 +9,8 @@ module ActiveresourceResponse
              rescue StandardError => e
                raise e
              end
-             response.extend(ActiveresourceResponse::HttpResponse)      
+             response.extend(ActiveresourceResponse::HttpResponse)
+            
              Thread.current[:ActiveResourceHttpResponse] = response
            end
            def http_response
