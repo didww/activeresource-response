@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency('activeresource', '>= 3.0')
 
-
+  s.add_development_dependency "test-unit"
   s.add_development_dependency 'rake'
 
   s.extra_rdoc_files = %w( README.rdoc )
