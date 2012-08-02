@@ -1,4 +1,4 @@
-module ActiveresourceResponse   
+module ActiveResourceResponse
 
   module ResponseMethod
     

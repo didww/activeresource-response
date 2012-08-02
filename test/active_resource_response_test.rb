@@ -1,12 +1,12 @@
 lib = File.expand_path("#{File.dirname(__FILE__)}/../lib")
-test = File.expand_path("#{File.dirname(__FILE__)}/../test")
+unit_tests = File.expand_path("#{File.dirname(__FILE__)}/../test")
 $:.unshift(lib)
-$:.unshift(test)
+$:.unshift(unit_tests)
 
 require 'test/unit'
 require 'active_resource'
 require 'active_resource/http_mock'
-require 'activeresource-response'
+require 'active_resource_response'
 require "fixtures/country"
 
 

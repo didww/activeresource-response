@@ -1,11 +1,11 @@
 # -*- encoding: utf-8 -*-
 $:.push File.expand_path("../lib", __FILE__)
-require "activeresource-response/version"
+require "active_resource_response/version"
 
 Gem::Specification.new do |s|
   
   s.name        = "activeresource-response"
-  s.version     = ActiveresourceResponse::Version::VERSION
+  s.version     = ActiveResourceResponse::Version::VERSION
   s.authors     = ["Igor Fedoronchuk"]
   s.email       = ["fedoronchuk@gmail.com"]
   s.homepage    = "http://fivell.github.com/activeresource-response/"

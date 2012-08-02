@@ -1,4 +1,4 @@
-module ActiveresourceResponse
+module ActiveResourceResponse
    module Connection
      def self.included(base)
        base.class_eval  do
@@ -9,12 +9,12 @@ module ActiveresourceResponse
              rescue StandardError => e
                raise e
              end
-             response.extend(ActiveresourceResponse::HttpResponse)
+             response.extend(ActiveResourceResponse::HttpResponse)
             
-             Thread.current[:ActiveResourceHttpResponse] = response
+             Thread.current[:ActiveResourceResponse] = response
            end
            def http_response
-              Thread.current[:ActiveResourceHttpResponse]
+              Thread.current[:ActiveResourceResponse]
            end    
         end
      end 
