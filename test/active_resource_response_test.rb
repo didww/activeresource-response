@@ -16,11 +16,14 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
   def setup
 
     @country = {:country => {:id => 1, :name => "Ukraine", :iso=>"UA"}}
+
+    @user = {:user => {:id => 1, :name => "Nsme", :password=>"password"}}
+
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/countries.json", {}, [@country].to_json, 200, {"X-total"=>'1'}
       mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
       mock.get "/countries/1/count.json", {}, {:count => 1155}.to_json, 200, {"X-total"=>'1'}
-
+      mock.post "/countries.json" , {},   @country.to_json, 422, {"X-total"=>'1'}
 
     end
 
@@ -67,6 +70,18 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     country = Country.find(1)
     assert_equal country.http.cookies['foo'] ,  'bar'
     assert_equal country.http.cookies['bar'] ,  'foo'
+  end
+
+
+  def test_get_headers_after_exception
+     begin
+       country = Country.create(@country[:country])
+     rescue ActiveResource::ConnectionError => e
+        response = e.response
+        assert_equal response.headers[:x_total].to_i, 1
+     end
+
+     assert_equal Country.connection.http_response['X-total'].to_i, 1
   end
 
 

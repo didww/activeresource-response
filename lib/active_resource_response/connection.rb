@@ -27,11 +27,13 @@ module ActiveResourceResponse
            alias_method :origin_handle_response, :handle_response 
            def handle_response(response)
 
-            origin_handle_response(response)
+             begin
+                origin_handle_response(response)
+             ensure
 
-             response.extend HttpResponse
-            
-             Thread.current[:ActiveResourceResponse] = response
+                response.extend HttpResponse
+                Thread.current[:ActiveResourceResponse] = response
+             end
            end
            def http_response
               Thread.current[:ActiveResourceResponse]
