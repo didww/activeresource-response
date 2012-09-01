@@ -79,19 +79,12 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
   def test_get_headers_after_exception
-     exception = nil
-     begin
-       country = Country.create(@country[:country])
 
-     rescue ActiveResource::ConnectionError => e
-        exception = e
-        response = e.response
-        assert_equal response.headers[:x_total].to_i, 1
-     end
+     Country.create(@country[:country])
 
      assert_equal Country.http_response['X-total'].to_i, 1
-     assert_equal country.http['X-total'].to_i, 1
-     assert_equal exception.class, ActiveResource::ResourceInvalid
+
+     assert_equal Country.http_response.code, 422
 
 
 

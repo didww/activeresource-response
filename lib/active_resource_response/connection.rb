@@ -29,6 +29,9 @@ module ActiveResourceResponse
 
              begin
                 origin_handle_response(response)
+             rescue
+
+               raise
              ensure
 
                 response.extend HttpResponse
