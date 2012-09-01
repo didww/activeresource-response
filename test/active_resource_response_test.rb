@@ -17,8 +17,6 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
     @country = {:country => {:id => 1, :name => "Ukraine", :iso=>"UA"}}
 
-    @user = {:user => {:id => 1, :name => "Nsme", :password=>"password"}}
-
     ActiveResource::HttpMock.respond_to do |mock|
       mock.get "/countries.json", {}, [@country].to_json, 200, {"X-total"=>'1'}
       mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
@@ -81,14 +79,22 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
   def test_get_headers_after_exception
+     exception = nil
      begin
        country = Country.create(@country[:country])
+
      rescue ActiveResource::ConnectionError => e
+        exception = e
         response = e.response
         assert_equal response.headers[:x_total].to_i, 1
      end
 
      assert_equal Country.http_response['X-total'].to_i, 1
+     assert_equal country.http['X-total'].to_i, 1
+     assert_equal exception.class, ActiveResource::ResourceInvalid
+
+
+
   end
 
 
