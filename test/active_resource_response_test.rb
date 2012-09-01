@@ -36,6 +36,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert countries.respond_to?(:http)
     assert countries.http.respond_to?(:cookies)
     assert countries.http.respond_to?(:headers)
+    assert Country.respond_to?(:http_response)
   end
 
   def test_get_headers_from_all
@@ -54,6 +55,8 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert_equal count.to_i, 1155
     assert_equal Country.connection.http_response['X-total'].to_i, 1
     assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
+    assert_equal Country.http_response['X-total'].to_i ,1
+
 
   end
 
@@ -70,6 +73,10 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     country = Country.find(1)
     assert_equal country.http.cookies['foo'] ,  'bar'
     assert_equal country.http.cookies['bar'] ,  'foo'
+    #from class
+    assert_equal Country.http_response.cookies['foo'] ,  'bar'
+    assert_equal Country.http_response.cookies['bar'] ,  'foo'
+
   end
 
 
@@ -81,7 +88,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
         assert_equal response.headers[:x_total].to_i, 1
      end
 
-     assert_equal Country.connection.http_response['X-total'].to_i, 1
+     assert_equal Country.http_response['X-total'].to_i, 1
   end
 
 

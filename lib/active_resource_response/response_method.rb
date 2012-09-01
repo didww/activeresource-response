@@ -29,7 +29,16 @@ module ActiveResourceResponse
     end
     
     module ClassMethods
+
+      def http_response
+        connection.http_response
+      end
+
+
       def add_response_method(method_name = :http_response)
+
+
+
 
         remove_response_method  if methods.map(&:to_sym).include?(:find_without_http_response)
         [:find, :get].each do |method| 
@@ -48,6 +57,8 @@ module ActiveResourceResponse
       end
 
       def remove_response_method
+
+
         [:find, :get].each do |method| 
           instance_eval   <<-EOS
             undef :#{method}
