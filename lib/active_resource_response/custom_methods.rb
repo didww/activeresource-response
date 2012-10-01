@@ -21,54 +21,19 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 module ActiveResourceResponse
-
-  module ResponseMethod
+  module CustomMethods
     
-    def self.included(base)
-      base.extend ClassMethods
-    end
-        
-    module ClassMethods
-
-      def http_response
-        connection.http_response
-      end
-
-
-      def add_response_method(method_name = :http_response)
-          
-        class_attribute :http_response_method
-        self.http_response_method = method_name
-        
-        remove_response_method  if methods.map(&:to_sym).include?(:find_without_http_response)
-        [:find, :get].each do |method| 
-          instance_eval  <<-EOS
-          alias #{method}_without_http_response #{method}
-          def #{method}(*arguments)
-            result = #{method}_without_http_response(*arguments)
+     def get(custom_method_name, options = {})
+        result = super(custom_method_name, options)
+        if self.class.http_response_method
             result.instance_variable_set(:@http_response, connection.http_response)
-            def result.#{method_name} 
-              @http_response
-            end   
-            result
-          end
-          EOS
-        end
-      end
-
-      def remove_response_method
-
-
-        [:find, :get].each do |method| 
-          instance_eval   <<-EOS
-            undef :#{method}
-            alias :#{method} :#{method}_without_http_response 
-            undef :#{method}_without_http_response
-          EOS
-                     
+            (class << result; self; end).send(:define_method, self.class.http_response_method ) do    
+                 @http_response
+            end rescue nil
         end 
-      end   
-
-    end
-  end   
-end
+        result     
+     end
+      
+  end
+end  
+    

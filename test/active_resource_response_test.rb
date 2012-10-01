@@ -59,12 +59,10 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert_equal Country.connection.http_response['X-total'].to_i, 1
     assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
     assert_equal Country.http_response['X-total'].to_i ,1
-    
+
     cities = Country.find(1).get("cities")
     assert cities.respond_to?(:http)
     assert_equal cities.http['X-total'].to_i, 1  
-
-
   end
 
 
