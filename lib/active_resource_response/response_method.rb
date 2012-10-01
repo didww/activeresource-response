@@ -50,11 +50,8 @@ module ActiveResourceResponse
 
       def add_response_method(method_name = :http_response)
           
-        class << self
-            attr_reader :http_response_method
-        end unless respond_to?(:http_response_method)
-        
-        instance_variable_set(:@http_response_method, method_name)
+        class_attribute :http_response_method
+        self.http_response_method = method_name
         
         remove_response_method  if methods.map(&:to_sym).include?(:find_without_http_response)
         [:find, :get].each do |method| 
