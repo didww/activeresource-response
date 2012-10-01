@@ -28,6 +28,19 @@ module ActiveResourceResponse
       base.extend ClassMethods
     end
     
+    #get from module CustomMethods  
+    def get(custom_method_name, options = {})
+       result = super(custom_method_name, options)
+       if self.class.http_response_method
+           result.instance_variable_set(:@http_response, connection.http_response)
+           (class << result; self; end).send(:define_method, self.class.http_response_method ) do    
+                @http_response
+           end rescue nil
+       end 
+       result     
+    end
+    
+    
     module ClassMethods
 
       def http_response
@@ -36,10 +49,13 @@ module ActiveResourceResponse
 
 
       def add_response_method(method_name = :http_response)
-
-
-
-
+          
+        class << self
+            attr_reader :http_response_method
+        end unless respond_to?(:http_response_method)
+        
+        instance_variable_set(:@http_response_method, method_name)
+        
         remove_response_method  if methods.map(&:to_sym).include?(:find_without_http_response)
         [:find, :get].each do |method| 
           instance_eval  <<-EOS

@@ -26,14 +26,11 @@ module ActiveResourceResponse
        base.class_eval  do
            alias_method :origin_handle_response, :handle_response 
            def handle_response(response)
-
              begin
                 origin_handle_response(response)
              rescue
-
                raise
              ensure
-
                 response.extend HttpResponse
                 Thread.current[:ActiveResourceResponse] = response
              end

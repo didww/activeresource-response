@@ -16,14 +16,19 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
   def setup
 
     @country = {:country => {:id => 1, :name => "Ukraine", :iso=>"UA"}}
-
+    @city = {:city => {:id => 1, :name => "Odessa", :population => 2500000 }}
     ActiveResource::HttpMock.respond_to do |mock|
+      
+     
       mock.get "/countries.json", {}, [@country].to_json, 200, {"X-total"=>'1'}
       mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
-      mock.get "/countries/1/count.json", {}, {:count => 1155}.to_json, 200, {"X-total"=>'1'}
+      mock.get "/countries/1/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
       mock.post "/countries.json" , {},   @country.to_json, 422, {"X-total"=>'1'}
-
+      mock.get "/countries/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
     end
+
+
+
 
 
   end
@@ -49,11 +54,17 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
   def test_get_headers_from_custom_methods
-    count = Country.find(1).get("count")
-    assert_equal count.to_i, 1155
+    count = Country.find(1).get("population")    
+    assert_equal count.to_i, 45000000
     assert_equal Country.connection.http_response['X-total'].to_i, 1
     assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
     assert_equal Country.http_response['X-total'].to_i ,1
+    
+   
+    
+    cities = Country.find(1).get("cities")
+    assert cities.respond_to?(:http)
+    assert_equal cities.http['X-total'].to_i, 1  
 
 
   end
@@ -79,15 +90,9 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
   def test_get_headers_after_exception
-
      Country.create(@country[:country])
-
      assert_equal Country.http_response['X-total'].to_i, 1
-
      assert_equal Country.http_response.code, 422
-
-
-
   end
 
 
