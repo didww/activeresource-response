@@ -91,7 +91,7 @@ Example
 You can access response from result of custom get method
 Example
 
-class Country < ActiveResource::Base
+  class Country < ActiveResource::Base
     self.site = 'http://0.0.0.0:3000/'
     add_response_method :http  # our new method
   end
