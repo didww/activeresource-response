@@ -22,8 +22,23 @@
 #++
 module ActiveResourceResponse
   module CustomMethods
+  extend ActiveSupport::Concern
+     included do
+      class << self
 
+        alias :origin_get :get
 
+        def get(custom_method_name, options = {})
+              result = self.origin_get(custom_method_name, options)
+              if self.respond_to? :http_response_method
+                result =  self.merge_response_to_result(result)
+              end
+              result
+
+        end
+
+     end
+     end
      def get(custom_method_name, options = {})
         result = super(custom_method_name, options)
         if self.class.respond_to? :http_response_method
@@ -32,19 +47,7 @@ module ActiveResourceResponse
         result
      end
 
-     module ClassMethods
 
-        def get(method_name, options = {})
-           result = super(custom_method_name, options)
-           if self.respond_to? :http_response_method
-              result =  self.class.merge_response_to_result(result)
-           end
-           result
-
-        end
-
-
-     end
 
   end
 end  

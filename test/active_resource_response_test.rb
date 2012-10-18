@@ -27,14 +27,13 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
       mock.get "/regions.json", {}, [@region].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/1.json", {}, @region.to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
-      mock.get "/regions/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
+      mock.get "/regions/cities.json", {}, [@city].to_json, 200, {"X-total"=>'2'}
       mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
       mock.get "/countries/1/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
       mock.post "/countries.json" , {},   @country.to_json, 422, {"X-total"=>'1'}
       mock.get "/countries/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
       mock.get "/cities/1/population.json", {},  {:count => 2500000}.to_json, 200, {"X-total"=>'1'}
-
       mock.get "/cities/1.json" , {}, @city.to_json,  200, {"X-total"=>'1'}
       mock.get "/cities.json" , {}, [@city].to_json,  200, {"X-total"=>'1'}
     end
@@ -70,14 +69,20 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
   def test_get_headers_from_custom_methods
+     cities = Region.get("cities")
+
+    assert cities.respond_to?(:http_response)
+    assert_equal cities.http_response['X-total'].to_i, 2
+
+
     count = Country.find(1).get("population")    
     assert_equal count.to_i, 45000000
     assert_equal Country.connection.http_response['X-total'].to_i, 1
     assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
     assert_equal Country.http_response['X-total'].to_i ,1
     cities = Country.find(1).get("cities")
-    assert cities.respond_to?(:http)
-    assert_equal cities.http['X-total'].to_i, 1
+    assert cities.respond_to?(:http)   , "Cities should respond to http"
+    assert_equal cities.http['X-total'].to_i, 1   , "Cities total value should be 1"
 
     regions_population = Region.get("population")
     assert_equal regions_population.to_i, 45000000
@@ -86,9 +91,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert cities.respond_to?(:http_response)
     assert_equal cities.http_response['X-total'].to_i, 1
 
-    cities = Region.get("cities")
-    assert cities.respond_to?(:http_response)
-    assert_equal cities.http_response['X-total'].to_i, 1
+
 
   end
 

@@ -23,7 +23,7 @@
 module ActiveResourceResponse
 
   module ResponseMethod
-    
+
     def self.included(base)
       base.extend ClassMethods
 
@@ -41,29 +41,24 @@ module ActiveResourceResponse
         self.http_response_method = method_name
         
         remove_response_method  if methods.map(&:to_sym).include?(:find_without_http_response)
-        [:find, :get].each do |method| 
-          instance_eval  <<-EOS
-          alias #{method}_without_http_response #{method}
-          def #{method}(*arguments)
-            result = #{method}_without_http_response(*arguments)
+
+        class << self
+          alias find_without_http_response find
+          def find(*arguments)
+            result = find_without_http_response(*arguments)
             self.merge_response_to_result(result)
 
           end
-          EOS
         end
+
       end
 
       def remove_response_method
-
-
-        [:find, :get].each do |method| 
-          instance_eval   <<-EOS
-            undef :#{method}
-            alias :#{method} :#{method}_without_http_response 
-            undef :#{method}_without_http_response
-          EOS
-                     
-        end 
+        class << self
+          undef :find
+          alias :find :find_without_http_response
+          undef :find_without_http_response
+        end
       end
 
       def merge_response_to_result(result)
