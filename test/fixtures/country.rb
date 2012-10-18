@@ -7,3 +7,10 @@ end
 class Country < ActiveResourceResponseBase
   add_response_method :http
 end
+
+
+
+
+
+
+

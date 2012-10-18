@@ -8,7 +8,7 @@ require 'active_resource'
 require 'active_resource/http_mock'
 require 'active_resource_response'
 require "fixtures/country"
-
+require "fixtures/city"
 
 class ActiveResourceResponseTest < Test::Unit::TestCase
 
@@ -25,6 +25,10 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
       mock.get "/countries/1/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
       mock.post "/countries.json" , {},   @country.to_json, 422, {"X-total"=>'1'}
       mock.get "/countries/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
+      mock.get "/cities/1/population.json", {},  {:count => 2500000}.to_json, 200, {"X-total"=>'1'}
+
+      mock.get "/cities/1.json" , {}, @city.to_json,  200, {"X-total"=>'1'}
+      mock.get "/cities.json" , {}, [@city].to_json,  200, {"X-total"=>'1'}
     end
 
 
@@ -59,10 +63,20 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert_equal Country.connection.http_response['X-total'].to_i, 1
     assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
     assert_equal Country.http_response['X-total'].to_i ,1
-
     cities = Country.find(1).get("cities")
     assert cities.respond_to?(:http)
-    assert_equal cities.http['X-total'].to_i, 1  
+    assert_equal cities.http['X-total'].to_i, 1
+
+  end
+
+
+
+  def test_methods_without_http
+    cities  = City.all
+    assert_kind_of City, cities.first
+    count = cities.first.get("population")
+    assert_equal count.to_i, 2500000
+
   end
 
 
