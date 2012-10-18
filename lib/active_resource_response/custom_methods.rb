@@ -22,18 +22,30 @@
 #++
 module ActiveResourceResponse
   module CustomMethods
-    
+
+
      def get(custom_method_name, options = {})
         result = super(custom_method_name, options)
         if self.class.respond_to? :http_response_method
-            result.instance_variable_set(:@http_response, connection.http_response)
-            (class << result; self; end).send(:define_method, self.class.http_response_method ) do    
-                 @http_response
-            end rescue nil
-        end 
-        result     
+          result =  self.class.merge_response_to_result(result)
+        end
+        result
      end
-      
+
+     module ClassMethods
+
+        def get(method_name, options = {})
+           result = super(custom_method_name, options)
+           if self.respond_to? :http_response_method
+              result =  self.class.merge_response_to_result(result)
+           end
+           result
+
+        end
+
+
+     end
+
   end
 end  
     

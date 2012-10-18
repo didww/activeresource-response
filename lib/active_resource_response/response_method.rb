@@ -26,6 +26,7 @@ module ActiveResourceResponse
     
     def self.included(base)
       base.extend ClassMethods
+
     end
         
     module ClassMethods
@@ -33,6 +34,8 @@ module ActiveResourceResponse
       def http_response
         connection.http_response
       end
+
+
 
 
       def add_response_method(method_name = :http_response)
@@ -46,11 +49,8 @@ module ActiveResourceResponse
           alias #{method}_without_http_response #{method}
           def #{method}(*arguments)
             result = #{method}_without_http_response(*arguments)
-            result.instance_variable_set(:@http_response, connection.http_response)
-            def result.#{method_name} 
-              @http_response
-            end   
-            result
+            self.merge_response_to_result(result)
+
           end
           EOS
         end
@@ -67,7 +67,17 @@ module ActiveResourceResponse
           EOS
                      
         end 
-      end   
+      end
+
+      def merge_response_to_result(result)
+           result.instance_variable_set(:@http_response, connection.http_response)
+            (class << result; self; end).send(:define_method, self.http_response_method ) do
+                 @http_response
+            end rescue nil
+
+           result
+      end
+
 
     end
   end   

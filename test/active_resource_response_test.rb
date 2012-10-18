@@ -10,6 +10,8 @@ require 'active_resource_response'
 require "fixtures/country"
 require "fixtures/city"
 
+require "fixtures/region"
+
 class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
@@ -17,14 +19,19 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
     @country = {:country => {:id => 1, :name => "Ukraine", :iso=>"UA"}}
     @city = {:city => {:id => 1, :name => "Odessa", :population => 2500000 }}
+    @region = {:region => {:id => 1, :name => "Odessa region", :population => 4500000 }}
     ActiveResource::HttpMock.respond_to do |mock|
       
      
       mock.get "/countries.json", {}, [@country].to_json, 200, {"X-total"=>'1'}
+      mock.get "/regions.json", {}, [@region].to_json, 200, {"X-total"=>'1'}
+       mock.get "/regions/1.json", {}, @region.to_json, 200, {"X-total"=>'1'}
+      mock.get "/regions/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
       mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
       mock.get "/countries/1/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
       mock.post "/countries.json" , {},   @country.to_json, 422, {"X-total"=>'1'}
       mock.get "/countries/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
+      mock.get "/regions/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
       mock.get "/cities/1/population.json", {},  {:count => 2500000}.to_json, 200, {"X-total"=>'1'}
 
       mock.get "/cities/1.json" , {}, @city.to_json,  200, {"X-total"=>'1'}
@@ -44,6 +51,10 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert countries.http.respond_to?(:cookies)
     assert countries.http.respond_to?(:headers)
     assert Country.respond_to?(:http_response)
+
+    regions = Region.all
+    assert regions.respond_to?(:http_response)
+
   end
 
   def test_get_headers_from_all
@@ -66,6 +77,16 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     cities = Country.find(1).get("cities")
     assert cities.respond_to?(:http)
     assert_equal cities.http['X-total'].to_i, 1
+
+    regions_population = Region.get("population")
+    assert_equal regions_population.to_i, 45000000
+
+    cities = Region.find(1).get("cities")
+    assert cities.respond_to?(:http_response)
+    assert_equal cities.http_response['X-total'].to_i, 1
+
+
+
 
   end
 
