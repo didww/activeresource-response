@@ -40,7 +40,7 @@ module ActiveResourceResponse
         class_attribute :http_response_method
         self.http_response_method = method_name
 
-        #remove_response_method
+
 
         class << self
           alias find_without_http_response find
