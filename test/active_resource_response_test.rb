@@ -27,6 +27,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
       mock.get "/regions.json", {}, [@region].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/1.json", {}, @region.to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
+      mock.get "/regions/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
       mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
       mock.get "/countries/1/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
       mock.post "/countries.json" , {},   @country.to_json, 422, {"X-total"=>'1'}
@@ -85,8 +86,9 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert cities.respond_to?(:http_response)
     assert_equal cities.http_response['X-total'].to_i, 1
 
-
-
+    cities = Region.get("cities")
+    assert cities.respond_to?(:http_response)
+    assert_equal cities.http_response['X-total'].to_i, 1
 
   end
 
