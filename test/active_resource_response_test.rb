@@ -18,11 +18,11 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
   def setup
 
     @country = {:country => {:id => 1, :name => "Ukraine", :iso=>"UA"}}
-    @city = {:city => {:id => 1, :name => "Odessa", :population => 2500000 }}
-    @region = {:region => {:id => 1, :name => "Odessa region", :population => 4500000 }}
+    @city = {:city => {:id => 1, :name => "Odessa", :population => 2500000}}
+    @region = {:region => {:id => 1, :name => "Odessa region", :population => 4500000}}
     ActiveResource::HttpMock.respond_to do |mock|
-      
-     
+
+
       mock.get "/countries.json", {}, [@country].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions.json", {}, [@region].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/1.json", {}, @region.to_json, 200, {"X-total"=>'1'}
@@ -30,16 +30,13 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
       mock.get "/regions/cities.json", {}, [@city].to_json, 200, {"X-total"=>'2'}
       mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
       mock.get "/countries/1/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
-      mock.post "/countries.json" , {},   @country.to_json, 422, {"X-total"=>'1'}
+      mock.post "/countries.json", {}, @country.to_json, 422, {"X-total"=>'1'}
       mock.get "/countries/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
-      mock.get "/cities/1/population.json", {},  {:count => 2500000}.to_json, 200, {"X-total"=>'1'}
-      mock.get "/cities/1.json" , {}, @city.to_json,  200, {"X-total"=>'1'}
-      mock.get "/cities.json" , {}, [@city].to_json,  200, {"X-total"=>'1'}
+      mock.get "/cities/1/population.json", {}, {:count => 2500000}.to_json, 200, {"X-total"=>'1'}
+      mock.get "/cities/1.json", {}, @city.to_json, 200, {"X-total"=>'1'}
+      mock.get "/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
     end
-
-
-
 
 
   end
@@ -69,20 +66,20 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
   def test_get_headers_from_custom_methods
-     cities = Region.get("cities")
+    cities = Region.get("cities")
 
     assert cities.respond_to?(:http_response)
     assert_equal cities.http_response['X-total'].to_i, 2
 
 
-    count = Country.find(1).get("population")    
+    count = Country.find(1).get("population")
     assert_equal count.to_i, 45000000
     assert_equal Country.connection.http_response['X-total'].to_i, 1
     assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
-    assert_equal Country.http_response['X-total'].to_i ,1
+    assert_equal Country.http_response['X-total'].to_i, 1
     cities = Country.find(1).get("cities")
-    assert cities.respond_to?(:http)   , "Cities should respond to http"
-    assert_equal cities.http['X-total'].to_i, 1   , "Cities total value should be 1"
+    assert cities.respond_to?(:http), "Cities should respond to http"
+    assert_equal cities.http['X-total'].to_i, 1, "Cities total value should be 1"
 
     regions_population = Region.get("population")
     assert_equal regions_population.to_i, 45000000
@@ -92,13 +89,11 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert_equal cities.http_response['X-total'].to_i, 1
 
 
-
   end
 
 
-
   def test_methods_without_http
-    cities  = City.all
+    cities = City.all
     assert_kind_of City, cities.first
     count = cities.first.get("population")
     assert_equal count.to_i, 2500000
@@ -116,19 +111,19 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
   def test_get_cookies
     country = Country.find(1)
-    assert_equal country.http.cookies['foo'] ,  'bar'
-    assert_equal country.http.cookies['bar'] ,  'foo'
+    assert_equal country.http.cookies['foo'], 'bar'
+    assert_equal country.http.cookies['bar'], 'foo'
     #from class
-    assert_equal Country.http_response.cookies['foo'] ,  'bar'
-    assert_equal Country.http_response.cookies['bar'] ,  'foo'
+    assert_equal Country.http_response.cookies['foo'], 'bar'
+    assert_equal Country.http_response.cookies['bar'], 'foo'
 
   end
 
 
   def test_get_headers_after_exception
-     Country.create(@country[:country])
-     assert_equal Country.http_response['X-total'].to_i, 1
-     assert_equal Country.http_response.code, 422
+    Country.create(@country[:country])
+    assert_equal Country.http_response['X-total'].to_i, 1
+    assert_equal Country.http_response.code, 422
   end
 
 

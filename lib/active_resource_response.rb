@@ -31,7 +31,7 @@ ActiveResource::Connection.send :include, ActiveResourceResponse::Connection
 ActiveResource::Base.send :include, ActiveResourceResponse::ResponseMethod
 ActiveResource::Base.send :include, ActiveResourceResponse::CustomMethods
 if defined? ActiveResource::Response
-   require "active_resource_response/response"
-   ActiveResource::Response.send :include, ActiveResourceResponse::Response
+  require "active_resource_response/response"
+  ActiveResource::Response.send :include, ActiveResourceResponse::Response
 
 end

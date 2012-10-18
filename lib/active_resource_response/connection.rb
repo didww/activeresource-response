@@ -21,24 +21,26 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 module ActiveResourceResponse
-   module Connection
-     def self.included(base)
-       base.class_eval  do
-           alias_method :origin_handle_response, :handle_response 
-           def handle_response(response)
-             begin
-                origin_handle_response(response)
-             rescue
-               raise
-             ensure
-                response.extend HttpResponse
-                Thread.current[:ActiveResourceResponse] = response
-             end
-           end
-           def http_response
-              Thread.current[:ActiveResourceResponse]
-           end    
+  module Connection
+    def self.included(base)
+      base.class_eval do
+        alias_method :origin_handle_response, :handle_response
+
+        def handle_response(response)
+          begin
+            origin_handle_response(response)
+          rescue
+            raise
+          ensure
+            response.extend HttpResponse
+            Thread.current[:ActiveResourceResponse] = response
+          end
         end
-     end 
-   end
+
+        def http_response
+          Thread.current[:ActiveResourceResponse]
+        end
+      end
+    end
+  end
 end
