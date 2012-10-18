@@ -35,9 +35,6 @@ module ActiveResourceResponse
         connection.http_response
       end
 
-
-
-
       def add_response_method(method_name = :http_response)
           
         class_attribute :http_response_method

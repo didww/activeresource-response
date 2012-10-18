@@ -25,7 +25,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
      
       mock.get "/countries.json", {}, [@country].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions.json", {}, [@region].to_json, 200, {"X-total"=>'1'}
-       mock.get "/regions/1.json", {}, @region.to_json, 200, {"X-total"=>'1'}
+      mock.get "/regions/1.json", {}, @region.to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
       mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
       mock.get "/countries/1/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
