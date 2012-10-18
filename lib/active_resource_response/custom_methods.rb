@@ -25,7 +25,7 @@ module ActiveResourceResponse
     
      def get(custom_method_name, options = {})
         result = super(custom_method_name, options)
-        if self.class.http_response_method
+        if self.class.respond_to? :http_response_method
             result.instance_variable_set(:@http_response, connection.http_response)
             (class << result; self; end).send(:define_method, self.class.http_response_method ) do    
                  @http_response
