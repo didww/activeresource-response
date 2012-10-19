@@ -43,7 +43,7 @@ module ActiveResourceResponse
 
 
         class << self
-          alias find_without_http_response find
+          alias :find_without_http_response :find
 
           def find(*arguments)
             result = find_without_http_response(*arguments)
@@ -54,6 +54,16 @@ module ActiveResourceResponse
 
       end
 
+
+
+      def remove_response_method
+         class << self
+            undef :find
+            alias :find :find_without_http_response
+            undef :find_without_http_response
+
+         end
+      end
 
       def merge_response_to_result(result)
         result.instance_variable_set(:@http_response, connection.http_response)
