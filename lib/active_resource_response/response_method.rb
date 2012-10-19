@@ -61,6 +61,8 @@ module ActiveResourceResponse
             undef :find
             alias :find :find_without_http_response
             undef :find_without_http_response
+            undef :http_response_method
+            undef :http_response_method=
 
          end
       end

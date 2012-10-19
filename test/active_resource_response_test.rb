@@ -32,8 +32,8 @@ require 'active_resource/http_mock'
 require 'active_resource_response'
 require "fixtures/country"
 require "fixtures/city"
-
 require "fixtures/region"
+require "fixtures/street"
 
 class ActiveResourceResponseTest < Test::Unit::TestCase
 
@@ -43,6 +43,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     @country = {:country => {:id => 1, :name => "Ukraine", :iso=>"UA"}}
     @city = {:city => {:id => 1, :name => "Odessa", :population => 2500000}}
     @region = {:region => {:id => 1, :name => "Odessa region", :population => 4500000}}
+    @street = {:street => {:id => 1, :name => "Deribasovskaya", :population => 2300}}
     ActiveResource::HttpMock.respond_to do |mock|
 
 
@@ -59,6 +60,9 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
       mock.get "/cities/1/population.json", {}, {:count => 2500000}.to_json, 200, {"X-total"=>'1'}
       mock.get "/cities/1.json", {}, @city.to_json, 200, {"X-total"=>'1'}
       mock.get "/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
+      mock.get "/streets.json", {}, [@street].to_json, 200, {"X-total"=>'1'}
+      mock.get "/streets/1/city.json", {}, @city.to_json, 200, {"X-total"=>'1'}
+      mock.get "/streets/1.json", {}, @street.to_json, 200, {"X-total"=>'1'}
     end
 
 
@@ -147,6 +151,22 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     Country.create(@country[:country])
     assert_equal Country.http_response['X-total'].to_i, 1
     assert_equal Country.http_response.code, 422
+  end
+
+
+  def test_remove_method
+
+     street  = Street.find(:first)
+     assert !(street.respond_to?(ActiveResourceResponseBase.http_response_method))
+     city = Street.find(1).get('city')
+     assert !(city.respond_to?(ActiveResourceResponseBase.http_response_method))
+     #test if all ok in base class
+     country = Country.find(1)
+     assert country.respond_to?(Country.http_response_method)
+     region = Region.find(1)
+     assert region.respond_to?(ActiveResourceResponseBase.http_response_method)
+
+
   end
 
 
