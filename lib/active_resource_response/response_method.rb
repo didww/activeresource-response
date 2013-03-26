@@ -26,7 +26,6 @@ module ActiveResourceResponse
 
     def self.included(base)
       base.extend ClassMethods
-
     end
 
     module ClassMethods
@@ -36,26 +35,18 @@ module ActiveResourceResponse
       end
 
       def add_response_method(method_name = :http_response)
-
         class_attribute :http_response_method
-        self.http_response_method = method_name
-
-
-
+        self.http_response_method = method_name 
         class << self
           alias :find_without_http_response :find
 
           def find(*arguments)
             result = find_without_http_response(*arguments)
             self.merge_response_to_result(result)
-
           end
         end unless methods.map(&:to_sym).include?(:find_without_http_response)
-
       end
-
-
-
+      
       def remove_response_method
          class << self
             undef :find
@@ -63,7 +54,6 @@ module ActiveResourceResponse
             undef :find_without_http_response
             undef :http_response_method
             undef :http_response_method=
-
          end
       end
 
@@ -72,11 +62,8 @@ module ActiveResourceResponse
         (class << result; self; end).send(:define_method, self.http_response_method) do
           @http_response
         end rescue nil
-
         result
       end
-
-
     end
   end
 end

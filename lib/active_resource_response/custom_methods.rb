@@ -34,9 +34,7 @@ module ActiveResourceResponse
             result = self.merge_response_to_result(result)
           end
           result
-
         end
-
       end
     end
 

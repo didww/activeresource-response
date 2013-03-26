@@ -22,15 +22,12 @@
 #++
 module ActiveResourceResponse
   module Response
+    
+    #to avoid methods conflict with Net:HttpResponse and ActiveResource::Response (HttpMock)
     def self.included(base)
       base.class_eval do
         def to_hash
           @headers
-        end
-
-        # to avoid method name conflict with Response:HttpResponse:headers
-        def [](key)
-          @headers[key]
         end
       end
     end
