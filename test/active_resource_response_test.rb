@@ -27,8 +27,6 @@ $:.unshift(lib)
 $:.unshift(unit_tests)
 
 require 'test/unit'
-require 'active_resource'
-require 'active_resource/http_mock'
 require 'active_resource_response'
 require "fixtures/country"
 require "fixtures/city"
@@ -39,14 +37,12 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
   def setup
-
     @country = {:country => {:id => 1, :name => "Ukraine", :iso=>"UA"}}
     @city = {:city => {:id => 1, :name => "Odessa", :population => 2500000}}
     @region = {:region => {:id => 1, :name => "Odessa region", :population => 4500000}}
     @street = {:street => {:id => 1, :name => "Deribasovskaya", :population => 2300}}
+    
     ActiveResource::HttpMock.respond_to do |mock|
-
-
       mock.get "/countries.json", {}, [@country].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions.json", {}, [@region].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/1.json", {}, @region.to_json, 200, {"X-total"=>'1'}
@@ -64,8 +60,6 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
       mock.get "/streets/1/city.json", {}, @city.to_json, 200, {"X-total"=>'1'}
       mock.get "/streets/1.json", {}, @street.to_json, 200, {"X-total"=>'1'}
     end
-
-
   end
 
 
@@ -75,46 +69,34 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert countries.http.respond_to?(:cookies)
     assert countries.http.respond_to?(:headers)
     assert Country.respond_to?(:http_response)
-
     regions = Region.all
     assert regions.respond_to?(:http_response)
-
   end
 
   def test_get_headers_from_all
     countries = Country.all
     assert_kind_of Country, countries.first
     assert_equal "UA", countries.first.iso
-
-    assert_equal countries.http['X-total'].to_i, 1
     assert_equal countries.http.headers[:x_total].to_i, 1
-
   end
 
 
   def test_get_headers_from_custom_methods
     cities = Region.get("cities")
-
     assert cities.respond_to?(:http_response)
-    assert_equal cities.http_response['X-total'].to_i, 2
-
-
+    assert_equal cities.http_response.headers[:x_total].to_i, 2
     count = Country.find(1).get("population")
     assert_equal count.to_i, 45000000
-    assert_equal Country.connection.http_response['X-total'].to_i, 1
     assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
-    assert_equal Country.http_response['X-total'].to_i, 1
+    assert_equal Country.http_response.headers[:x_total].to_i, 1
     cities = Country.find(1).get("cities")
     assert cities.respond_to?(:http), "Cities should respond to http"
-    assert_equal cities.http['X-total'].to_i, 1, "Cities total value should be 1"
-
+    assert_equal cities.http.headers[:x_total].to_i, 1, "Cities total value should be 1"
     regions_population = Region.get("population")
     assert_equal regions_population.to_i, 45000000
-
     cities = Region.find(1).get("cities")
     assert cities.respond_to?(:http_response)
-    assert_equal cities.http_response['X-total'].to_i, 1
-
+    assert_equal cities.http_response.headers[:x_total].to_i, 1
 
   end
 
@@ -124,17 +106,12 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert_kind_of City, cities.first
     count = cities.first.get("population")
     assert_equal count.to_i, 2500000
-
   end
-
 
   def test_get_headers_from_find
     country = Country.find(1)
-    assert_equal country.http['X-total'].to_i, 1
     assert_equal country.http.headers[:x_total].to_i, 1
-
   end
-
 
   def test_get_cookies
     country = Country.find(1)
@@ -146,16 +123,13 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
   end
 
-
   def test_get_headers_after_exception
     Country.create(@country[:country])
-    assert_equal Country.http_response['X-total'].to_i, 1
+    assert_equal Country.http_response.headers[:x_total].to_i, 1
     assert_equal Country.http_response.code, 422
   end
 
-
   def test_remove_method
-
      street  = Street.find(:first)
      assert !(street.respond_to?(ActiveResourceResponseBase.http_response_method))
      city = Street.find(1).get('city')
@@ -165,9 +139,6 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
      assert country.respond_to?(Country.http_response_method)
      region = Region.find(1)
      assert region.respond_to?(ActiveResourceResponseBase.http_response_method)
-
-
   end
-
 
 end

@@ -1,5 +1,5 @@
 = Activeresource-response 
-This gem adds possibility to access http response object from result (single object or collection) of activeresource call (methods : find, all, first, last, get )
+This gem adds possibility to access http response (Net::HTTPResponse) object from result (single object or collection) of activeresource call (methods : find, all, first, last, get )
 
 == Build status {<img src="https://secure.travis-ci.org/Fivell/activeresource-response.png" />}[http://travis-ci.org/Fivell/activeresource-response]  
 
@@ -74,11 +74,12 @@ Example
   class Order < ActiveResource::Base
     self.site = 'http://0.0.0.0:3000/'
     self.element_name = "order" 
-    add_response_method :my_response  # our new method
+    add_response_method :my_response  # our new method 
   end
 
   orders = Order.all
   first_order = Order.find(1) 
+  #see Net::HTTPResponse#[] method
   orders.my_response['content-length'] 
   # => "3831" 
   first_order.my_response['content-length'] 
@@ -119,11 +120,6 @@ Example
 == About Http response 
 http response is object of Net::HTTPOK, Net::HTTPClientError or one of other subclasses
 of Net::HTTPResponse class. For more information see documentation  http://www.ruby-doc.org/stdlib-1.9.3/libdoc/net/http/rdoc/Net/HTTPResponse.html
-
-
-== Inspiration
-
-http://stackoverflow.com/questions/5972429/active-resource-responses-how-to-get-them
 
 
 == Please, feel free to contact me if you have any questions
