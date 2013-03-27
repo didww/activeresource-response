@@ -58,10 +58,14 @@ module ActiveResourceResponse
       end
 
       def merge_response_to_result(result)
-        result.instance_variable_set(:@http_response, connection.http_response)
-        (class << result; self; end).send(:define_method, self.http_response_method) do
-          @http_response
-        end rescue nil
+        begin
+          result.instance_variable_set(:@http_response, connection.http_response)
+          (class << result; self; end).send(:define_method, self.http_response_method) do
+            @http_response
+          end 
+        rescue StandardError
+
+        end
         result
       end
     end
