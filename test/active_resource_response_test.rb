@@ -86,7 +86,13 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert cities.respond_to?(:http_response)
     assert_equal cities.http_response.headers[:x_total].to_i, 2
     count = Country.find(1).get("population")
-    assert_equal count.to_i, 45000000
+
+    #immutable objects doing good
+    some_numeric = 45000000
+    assert_equal count.to_i, some_numeric
+    assert count.respond_to?(:http)
+    assert !some_numeric.respond_to?(:http)
+
     assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
     assert_equal Country.http_response.headers[:x_total].to_i, 1
     cities = Country.find(1).get("cities")
@@ -106,6 +112,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert_kind_of City, cities.first
     count = cities.first.get("population")
     assert_equal count.to_i, 2500000
+
   end
 
   def test_get_headers_from_find

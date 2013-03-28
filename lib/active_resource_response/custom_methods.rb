@@ -31,7 +31,7 @@ module ActiveResourceResponse
         def get(custom_method_name, options = {})
           result = self.origin_get(custom_method_name, options)
           if self.respond_to? :http_response_method
-            result = self.merge_response_to_result(result)
+            result = self.wrap_result(result)
           end
           result
         end
@@ -41,7 +41,7 @@ module ActiveResourceResponse
     def get(custom_method_name, options = {})
       result = super(custom_method_name, options)
       if self.class.respond_to? :http_response_method
-        result = self.class.merge_response_to_result(result)
+        result = self.class.wrap_result(result)
       end
       result
     end
