@@ -31,6 +31,6 @@ ActiveResource::Connection.send :include, ActiveResourceResponse::Connection
 ActiveResource::Base.send :include, ActiveResourceResponse::ResponseMethod
 ActiveResource::Base.send :include, ActiveResourceResponse::CustomMethods
 
-require 'active_resource/http_mock'
-require "active_resource_response/response"
-ActiveResource::Response.send :include, ActiveResourceResponse::Response
+if defined?(Rails) and Rails.env.test?
+  require "active_resource_response/http_mock"
+end

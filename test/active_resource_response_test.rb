@@ -32,12 +32,13 @@ require "fixtures/country"
 require "fixtures/city"
 require "fixtures/region"
 require "fixtures/street"
-
+require "active_resource_response/http_mock"
 class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
   def setup
     @country = {:country => {:id => 1, :name => "Ukraine", :iso=>"UA"}}
+    @country_create_error = {"errors"=>{:base => ["Country exists"]}}
     @city = {:city => {:id => 1, :name => "Odessa", :population => 2500000}}
     @region = {:region => {:id => 1, :name => "Odessa region", :population => 4500000}}
     @street = {:street => {:id => 1, :name => "Deribasovskaya", :population => 2300}}
@@ -124,7 +125,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
   end
 
   def test_get_headers_after_exception
-    Country.create(@country[:country])
+    country = Country.create(@country[:country])
     assert_equal Country.http_response.headers[:x_total].to_i, 1
     assert_equal Country.http_response.code, 422
   end

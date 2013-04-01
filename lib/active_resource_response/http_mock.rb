@@ -20,16 +20,20 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
+require 'active_resource/http_mock'
 module ActiveResourceResponse
-  module Response
-    
+  module HttpMock
+    module Response
     #to avoid methods conflict with Net:HttpResponse and ActiveResource::Response (HttpMock)
-    def self.included(base)
-      base.class_eval do
-        def to_hash
-          @headers
+      def self.included(base)
+        base.class_eval do
+          def to_hash
+            @headers
+          end
         end
       end
     end
   end
 end
+
+ActiveResource::Response.send :include, ActiveResourceResponse::HttpMock::Response

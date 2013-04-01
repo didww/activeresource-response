@@ -64,7 +64,6 @@ module ActiveResourceResponse
             @http_response
           end 
         rescue StandardError
-
         end
         result
       end
