@@ -33,12 +33,13 @@ require "fixtures/city"
 require "fixtures/region"
 require "fixtures/street"
 require "active_resource_response/http_mock"
+
 class ActiveResourceResponseTest < Test::Unit::TestCase
 
 
   def setup
     @country = {:country => {:id => 1, :name => "Ukraine", :iso=>"UA"}}
-    @country_create_error = {"errors"=>{:base => ["Country exists"]}}
+    @country_create_error = {:errors => {:base => ["country exists"]}}
     @city = {:city => {:id => 1, :name => "Odessa", :population => 2500000}}
     @region = {:region => {:id => 1, :name => "Odessa region", :population => 4500000}}
     @street = {:street => {:id => 1, :name => "Deribasovskaya", :population => 2300}}
@@ -51,7 +52,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
       mock.get "/regions/cities.json", {}, [@city].to_json, 200, {"X-total"=>'2'}
       mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
       mock.get "/countries/1/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
-      mock.post "/countries.json", {}, @country.to_json, 422, {"X-total"=>'1'}
+      mock.post "/countries.json", {}, @country_create_error.to_json, 422, {"X-total"=>'1'}
       mock.get "/countries/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
       mock.get "/cities/1/population.json", {}, {:count => 2500000}.to_json, 200, {"X-total"=>'1'}
@@ -87,7 +88,13 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert cities.respond_to?(:http_response)
     assert_equal cities.http_response.headers[:x_total].to_i, 2
     count = Country.find(1).get("population")
-    assert_equal count.to_i, 45000000
+
+    #immutable objects doing good
+    some_numeric = 45000000
+    assert_equal count.to_i, some_numeric
+    assert count.respond_to?(:http)
+    assert !some_numeric.respond_to?(:http)
+
     assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
     assert_equal Country.http_response.headers[:x_total].to_i, 1
     cities = Country.find(1).get("cities")
@@ -107,6 +114,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert_kind_of City, cities.first
     count = cities.first.get("population")
     assert_equal count.to_i, 2500000
+
   end
 
   def test_get_headers_from_find
@@ -128,6 +136,8 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     country = Country.create(@country[:country])
     assert_equal Country.http_response.headers[:x_total].to_i, 1
     assert_equal Country.http_response.code, 422
+    assert_equal country.errors.full_messages.count ,1
+    assert_equal country.errors.count ,1
   end
 
   def test_remove_method
