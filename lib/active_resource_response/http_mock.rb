@@ -20,17 +20,20 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
-require 'cgi'
-require 'active_resource'
-require "active_resource_response/version"
-require "active_resource_response/http_response"
-require "active_resource_response/connection"
-require "active_resource_response/response_method"
-require "active_resource_response/custom_methods"
-ActiveResource::Connection.send :include, ActiveResourceResponse::Connection
-ActiveResource::Base.send :include, ActiveResourceResponse::ResponseMethod
-ActiveResource::Base.send :include, ActiveResourceResponse::CustomMethods
-
-if defined?(Rails) and Rails.env.test?
-  require "active_resource_response/http_mock"
+require 'active_resource/http_mock'
+module ActiveResourceResponse
+  module HttpMock
+    module Response
+    #to avoid methods conflict with Net:HttpResponse and ActiveResource::Response (HttpMock)
+      def self.included(base)
+        base.class_eval do
+          def to_hash
+            @headers
+          end
+        end
+      end
+    end
+  end
 end
+
+ActiveResource::Response.send :include, ActiveResourceResponse::HttpMock::Response
