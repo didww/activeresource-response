@@ -151,5 +151,10 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
      region = Region.find(1)
      assert region.respond_to?(ActiveResourceResponseBase.http_response_method)
   end
+  
+  def test_active_model_naming_methods
+      street = Country.find(1)
+      assert street.class.respond_to?(:model_name)
+  end
 
 end
