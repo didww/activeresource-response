@@ -48,8 +48,7 @@ class ActiveResourceResponseLintTest <  Test::Unit::TestCase
       ActiveResource::HttpMock.respond_to do |mock|
          mock.get "/streets/1.json", {}, @street.to_json, 200, {"X-total"=>'1'}
      end
-     @model = Street.find(1)
-     
+     @model = Street.find(1)   
    end
 end
   

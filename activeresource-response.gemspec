@@ -11,13 +11,13 @@ Gem::Specification.new do |s|
   s.homepage    = "http://fivell.github.com/activeresource-response/"
   s.summary     = %q{activeresource extension}
   s.description = %q{This gem adds possibility to access http response object from result of ActiveResource::Base find method }
+  s.license     = 'MIT'
 
-
-  s.add_dependency('activeresource', '>= 4.0.0')
+  s.add_dependency('activeresource', '~> 4.0')
 
   s.add_dependency "jruby-openssl" if RUBY_PLATFORM == "java"
-  s.add_development_dependency "test-unit"
-  s.add_development_dependency 'rake'
+  s.add_development_dependency "test-unit",'~> 2.5'
+  s.add_development_dependency 'rake', '~> 10'
 
   s.extra_rdoc_files = %w( README.rdoc )
   s.rdoc_options.concat ['--main', 'README.rdoc']
