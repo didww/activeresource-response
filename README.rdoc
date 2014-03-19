@@ -124,3 +124,6 @@ of Net::HTTPResponse class. For more information see documentation  http://www.r
 
 == Please, feel free to contact me if you have any questions
 fedoronchuk(at)gmail.com
+
+
+{<img src="https://d2weczhvl823v0.cloudfront.net/Fivell/activeresource-response/trend.png" />}[https://bitdeli.com/free]
