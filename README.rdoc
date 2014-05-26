@@ -121,6 +121,10 @@ Example
 http response is object of Net::HTTPOK, Net::HTTPClientError or one of other subclasses
 of Net::HTTPResponse class. For more information see documentation  http://www.ruby-doc.org/stdlib-1.9.3/libdoc/net/http/rdoc/Net/HTTPResponse.html
 
+== Testing with ActiveResource::HttpMock
+Add this line to your test to patch http_mock
+
+ # require "active_resource_response/http_mock"
 
 == Please, feel free to contact me if you have any questions
 fedoronchuk(at)gmail.com
