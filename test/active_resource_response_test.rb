@@ -79,14 +79,15 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     countries = Country.all
     assert_kind_of Country, countries.first
     assert_equal "UA", countries.first.iso
-    assert_equal countries.http.headers[:x_total].to_i, 1
+    assert_equal countries.http.headers[:x_total].first.to_i, 1
   end
 
 
   def test_get_headers_from_custom_methods
     cities = Region.get("cities")
     assert cities.respond_to?(:http_response)
-    assert_equal cities.http_response.headers[:x_total].to_i, 2
+    assert_equal cities.http_response.headers[:x_total].first.to_i, 2
+    assert_equal cities.http_response['X-total'].to_i, 2
     count = Country.find(1).get("population")
 
     #immutable objects doing good
@@ -95,16 +96,17 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
     assert count.respond_to?(:http)
     assert !some_numeric.respond_to?(:http)
 
-    assert_equal Country.connection.http_response.headers[:x_total].to_i, 1
-    assert_equal Country.http_response.headers[:x_total].to_i, 1
+    assert_equal Country.connection.http_response.headers[:x_total].first.to_i, 1
+    assert_equal Country.http_response.headers[:x_total].first.to_i, 1
+    assert_equal Country.http_response['X-total'].to_i, 1
     cities = Country.find(1).get("cities")
     assert cities.respond_to?(:http), "Cities should respond to http"
-    assert_equal cities.http.headers[:x_total].to_i, 1, "Cities total value should be 1"
+    assert_equal cities.http.headers[:x_total].first.to_i, 1, "Cities total value should be 1"
     regions_population = Region.get("population")
     assert_equal regions_population.to_i, 45000000
     cities = Region.find(1).get("cities")
     assert cities.respond_to?(:http_response)
-    assert_equal cities.http_response.headers[:x_total].to_i, 1
+    assert_equal cities.http_response.headers[:x_total], ['1']
 
   end
 
@@ -119,7 +121,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
   def test_get_headers_from_find
     country = Country.find(1)
-    assert_equal country.http.headers[:x_total].to_i, 1
+    assert_equal country.http.headers[:x_total], ['1']
   end
 
   def test_get_cookies
@@ -134,7 +136,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
   def test_get_headers_after_exception
     country = Country.create(@country[:country])
-    assert_equal Country.http_response.headers[:x_total].to_i, 1
+    assert_equal Country.http_response.headers[:x_total], ['1']
     assert_equal Country.http_response.code, 422
     assert_equal country.errors.full_messages.count ,1
     assert_equal country.errors.count ,1
