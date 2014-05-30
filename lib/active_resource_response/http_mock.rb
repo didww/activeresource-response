@@ -21,6 +21,7 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 require 'active_resource/http_mock'
+
 module ActiveResourceResponse
   module HttpMock
     module Response
@@ -28,7 +29,11 @@ module ActiveResourceResponse
       def self.included(base)
         base.class_eval do
           def to_hash
-            @headers
+            Hash[@headers.map{|k, value| [k, Array.wrap(value)] } ]
+          end
+
+          def [](key)
+            @headers[key]
           end
         end
       end
