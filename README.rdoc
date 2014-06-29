@@ -129,5 +129,3 @@ Add this line to your test to patch http_mock
 == Please, feel free to contact me if you have any questions
 fedoronchuk(at)gmail.com
 
-
-{<img src="https://d2weczhvl823v0.cloudfront.net/Fivell/activeresource-response/trend.png" />}[https://bitdeli.com/free]
