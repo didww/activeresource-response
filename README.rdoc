@@ -60,12 +60,24 @@ Client Side
       orders = Order.all(:params=>params)     
       @orders = Kaminari::PaginatableArray.new(
         orders,{
-                :limit => orders.http_response['X-limit'].to_i,
-             	:offset =>orders.http_response['X-offset'].to_i,
-             	:total_count => orders.http_response['X-total'].to_i
+               :limit => orders.http_response['X-limit'].to_i,
+               :offset =>orders.http_response['X-offset'].to_i,
+               :total_count => orders.http_response['X-total'].to_i
         }) 
     end
   end
+
+
+== Will_paginate
+Will_paginate has a little different API, so to populate headers 
+
+  response.headers["X-total"] = @orders.total_entries.to_s
+  response.headers["X-offset"] = @orders.offset.to_s
+  response.headers["X-limit"] = @orders.per_page.to_s
+  
+On the API client side you might also use will_paginate, in that case you can just require will_paginate/array (in initializer for example)
+and paginate array directly by calling .paginate(options) with proper total/page/per_page values – see 
+{source}[https://github.com/mislav/will_paginate/blob/master/lib/will_paginate/array.rb].
 
  
 == Every time when http connection invoked ActiveResource connection object  stores http response. You can access it with http_response method. 
