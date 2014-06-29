@@ -92,7 +92,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
     #immutable objects doing good
     some_numeric = 45000000
-    assert_equal count.to_i, some_numeric
+    assert_equal count, some_numeric
     assert count.respond_to?(:http)
     assert !some_numeric.respond_to?(:http)
 
