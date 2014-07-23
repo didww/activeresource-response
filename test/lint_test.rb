@@ -21,19 +21,8 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 
-lib = File.expand_path("#{File.dirname(__FILE__)}/../lib")
-unit_tests = File.expand_path("#{File.dirname(__FILE__)}/../test")
-$:.unshift(lib)
-$:.unshift(unit_tests)
+require_relative 'test_helper'
 
-
-require 'active_resource_response'
-require 'test_helper'
-require "fixtures/country"
-require "fixtures/city"
-require "fixtures/region"
-require "fixtures/street"
-require "active_resource_response/http_mock"
 
 
 #made pass lint test because of "to_key should return nil when `persisted?` returns false" error
@@ -48,8 +37,11 @@ class ActiveResourceResponseLintTest <  MiniTest::Test
       @street = {:street => {:id => 1, :name => "Deribasovskaya", :population => 2300}}
       ActiveResource::HttpMock.respond_to do |mock|
          mock.get "/streets/1.json", {}, @street.to_json, 200, {"X-total"=>'1'}
-     end
+      end
      @model = Street.find(1)   
    end
+
+
+
 end
   

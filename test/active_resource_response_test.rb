@@ -20,19 +20,7 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
-
-lib = File.expand_path("#{File.dirname(__FILE__)}/../lib")
-unit_tests = File.expand_path("#{File.dirname(__FILE__)}/../test")
-$:.unshift(lib)
-$:.unshift(unit_tests)
-
-require 'active_resource_response'
-require 'test_helper'
-require "fixtures/country"
-require "fixtures/city"
-require "fixtures/region"
-require "fixtures/street"
-require "active_resource_response/http_mock"
+require_relative 'test_helper'
 
 class ActiveResourceResponseTest < MiniTest::Test
 
