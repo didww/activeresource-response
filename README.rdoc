@@ -3,6 +3,7 @@ This gem adds possibility to access http response (Net::HTTPResponse) object fro
 
 {<img src="https://secure.travis-ci.org/Fivell/activeresource-response.png" />}[http://travis-ci.org/Fivell/activeresource-response]  
 {<img src="https://gemnasium.com/Fivell/activeresource-response.png" />}[https://gemnasium.com/Fivell/activeresource-response]  
+{<img src="https://coveralls.io/repos/Fivell/activeresource-response/badge.png?branch=master" alt="Coverage Status" />}[https://coveralls.io/r/Fivell/activeresource-response?branch=master]
 
 == Why It can be used?
 Such functionallity can be used for easily implementing pagination in a REST API so that an ActiveResource client can navigate paginated results.

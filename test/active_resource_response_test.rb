@@ -26,15 +26,15 @@ unit_tests = File.expand_path("#{File.dirname(__FILE__)}/../test")
 $:.unshift(lib)
 $:.unshift(unit_tests)
 
-require 'test/unit'
 require 'active_resource_response'
+require 'test_helper'
 require "fixtures/country"
 require "fixtures/city"
 require "fixtures/region"
 require "fixtures/street"
 require "active_resource_response/http_mock"
 
-class ActiveResourceResponseTest < Test::Unit::TestCase
+class ActiveResourceResponseTest < MiniTest::Test
 
 
   def setup
@@ -83,7 +83,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
   end
 
 
-  def test_get_headers_from_custom_methods
+  def test_headers_from_custom
     cities = Region.get("cities")
     assert cities.respond_to?(:http_response)
     assert_equal cities.http_response.headers[:x_total].first.to_i, 2
@@ -134,7 +134,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
 
   end
 
-  def test_get_headers_after_exception
+  def test_headers_after_exception
     country = Country.create(@country[:country])
     assert_equal Country.http_response.headers[:x_total], ['1']
     assert_equal Country.http_response.code, 422
@@ -154,7 +154,7 @@ class ActiveResourceResponseTest < Test::Unit::TestCase
      assert region.respond_to?(ActiveResourceResponseBase.http_response_method)
   end
   
-  def test_active_model_naming_methods
+  def test_model_naming_methods
       street = Country.find(1)
       assert street.class.respond_to?(:model_name)
   end

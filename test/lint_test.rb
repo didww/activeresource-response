@@ -28,6 +28,7 @@ $:.unshift(unit_tests)
 
 
 require 'active_resource_response'
+require 'test_helper'
 require "fixtures/country"
 require "fixtures/city"
 require "fixtures/region"
@@ -39,7 +40,7 @@ require "active_resource_response/http_mock"
 require "active_resource_response/lint"
 ActiveResource::Base.send :include, ActiveResourceResponse::Lint
 
-class ActiveResourceResponseLintTest <  Test::Unit::TestCase
+class ActiveResourceResponseLintTest <  MiniTest::Test
 
   include ActiveModel::Lint::Tests
 

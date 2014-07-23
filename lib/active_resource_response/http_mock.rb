@@ -32,6 +32,7 @@ module ActiveResourceResponse
             Hash[@headers.map{|k, value| [k, Array.wrap(value)] } ]
           end
 
+          remove_method :[]
           def [](key)
             @headers[key]
           end

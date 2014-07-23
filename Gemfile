@@ -1,4 +1,5 @@
 source "http://rubygems.org"
-
-# Specify your gem's dependencies in activeresource-response.gemspec
+group :test do
+  gem 'coveralls', require: false # Test coverage website. Go to https://coveralls.io
+end
 gemspec
