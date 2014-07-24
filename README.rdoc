@@ -77,10 +77,13 @@ Will_paginate has a little different API, so to populate headers
   response.headers["X-limit"] = @orders.per_page.to_s
   
 On the API client side you might also use will_paginate, in that case you can just require will_paginate/array (in initializer for example)
-and paginate array directly by calling .paginate(options) with proper total/page/per_page values – see 
-{source}[https://github.com/mislav/will_paginate/blob/master/lib/will_paginate/array.rb].
-
  
+ orders = Order.all(:params=>params)     
+ @orders = WillPaginate::Collection.create(params[:page] || 1, params[:per_page] || 10, orders.http_response['X-total'].to_i) do |pager|
+     pager.replace orders
+ end
+
+
 == Every time when http connection invoked ActiveResource connection object  stores http response. You can access it with http_response method. 
 Example
 
