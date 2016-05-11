@@ -33,12 +33,20 @@ module ActiveResourceResponse
             raise
           ensure
             response.extend HttpResponse
-            Thread.current[:ActiveResourceResponse] = response
+            self.http_response=(response)
           end
         end
 
         def http_response
-          Thread.current[:ActiveResourceResponse]
+          http_storage[:ActiveResourceResponse]
+        end
+
+        def http_response=(response)
+          http_storage[:ActiveResourceResponse] = response
+        end
+
+        def http_storage
+          Thread.current
         end
       end
     end
