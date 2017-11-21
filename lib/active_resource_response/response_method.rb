@@ -60,7 +60,7 @@ module ActiveResourceResponse
 
       def wrap_result(result)
         result = SimpleDelegator.new(result) unless result.duplicable?
-        result.instance_variable_set(:@http_response, connection.http_response)
+        result.instance_variable_set(:@http_response, connection.http_response) unless result.frozen?
         result.singleton_class.send(:define_method, self.http_response_method) do
           @http_response
         end
