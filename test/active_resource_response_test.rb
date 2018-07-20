@@ -76,12 +76,12 @@ class ActiveResourceResponseTest < MiniTest::Test
     assert cities.respond_to?(:http_response)
     assert_equal cities.http_response.headers[:x_total].first.to_i, 2
     assert_equal cities.http_response['X-total'].to_i, 2
-    count = Country.find(1).get("population")
+    population = Country.find(1).get("population")
 
     #immutable objects doing good
     some_numeric = 45000000
-    assert_equal count, some_numeric
-    assert count.respond_to?(:http)
+    assert_equal population['count'], some_numeric
+    assert population.respond_to?(:http)
     assert !some_numeric.respond_to?(:http)
 
     assert_equal Country.connection.http_response.headers[:x_total].first.to_i, 1
@@ -91,20 +91,17 @@ class ActiveResourceResponseTest < MiniTest::Test
     assert cities.respond_to?(:http), "Cities should respond to http"
     assert_equal cities.http.headers[:x_total].first.to_i, 1, "Cities total value should be 1"
     regions_population = Region.get("population")
-    assert_equal regions_population.to_i, 45000000
+    assert_equal regions_population['count'], 45000000
     cities = Region.find(1).get("cities")
     assert cities.respond_to?(:http_response)
     assert_equal cities.http_response.headers[:x_total], ['1']
-
   end
-
 
   def test_methods_without_http
     cities = City.all
     assert_kind_of City, cities.first
-    count = cities.first.get("population")
+    count = cities.first.get("population")['count']
     assert_equal count.to_i, 2500000
-
   end
 
   def test_get_headers_from_find
@@ -119,7 +116,6 @@ class ActiveResourceResponseTest < MiniTest::Test
     #from class
     assert_equal Country.http_response.cookies['foo'], 'bar'
     assert_equal Country.http_response.cookies['bar'], 'foo'
-
   end
 
   def test_headers_after_exception
