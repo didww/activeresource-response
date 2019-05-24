@@ -21,7 +21,6 @@
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
 require_relative 'test_helper'
-
 class ActiveResourceResponseTest < MiniTest::Test
 
 
@@ -38,7 +37,7 @@ class ActiveResourceResponseTest < MiniTest::Test
       mock.get "/regions/1.json", {}, @region.to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
       mock.get "/regions/cities.json", {}, [@city].to_json, 200, {"X-total"=>'2'}
-      mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT, foo=bar, bar=foo']}
+      mock.get "/countries/1.json", {}, @country.to_json, 200, {"X-total"=>'1', 'Set-Cookie'=>['path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT; foo=bar; bar=foo']}
       mock.get "/countries/1/population.json", {}, {:count => 45000000}.to_json, 200, {"X-total"=>'1'}
       mock.post "/countries.json", {}, @country_create_error.to_json, 422, {"X-total"=>'1'}
       mock.get "/countries/1/cities.json", {}, [@city].to_json, 200, {"X-total"=>'1'}
