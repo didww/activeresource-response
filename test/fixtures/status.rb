@@ -20,9 +20,7 @@
 # OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 # WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 #++
-
-module ActiveResourceResponse
-  module Version
-    VERSION = "1.3.0"
-  end
+class Status < ActiveResourceResponseBase
+  self.element_name = 'status'
+  self.prefix += 'countries/:country_id/'
 end
