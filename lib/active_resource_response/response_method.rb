@@ -45,7 +45,7 @@ module ActiveResourceResponse
             result = find_without_http_response(*arguments)
             self.wrap_result(result)
           end
-        end unless methods.map(&:to_sym).include?(:find_without_http_response)
+        end unless methods.include?(:find_without_http_response)
       end
 
       def remove_response_method
