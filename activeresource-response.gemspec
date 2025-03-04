@@ -8,7 +8,7 @@ Gem::Specification.new do |s|
   s.version     = ActiveResourceResponse::Version::VERSION
   s.authors     = ["Igor Fedoronchuk"]
   s.email       = ["fedoronchuk@gmail.com"]
-  s.homepage    = "http://fivell.github.com/activeresource-response/"
+  s.homepage    = "https://github.com/didww/activeresource-response"
   s.summary     = %q{activeresource extension}
   s.description = %q{This gem adds possibility to access http response object from result of ActiveResource::Base find method }
   s.license     = 'MIT'
