@@ -1,5 +1,3 @@
-require 'coveralls'
-Coveralls.wear!
 require 'minitest/autorun'
 require 'i18n'
 lib = File.expand_path("#{File.dirname(__FILE__)}/../lib")
