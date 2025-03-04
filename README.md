@@ -1,5 +1,5 @@
 ## Activeresource-response 
-####This gem adds possibility to access http response (Net::HTTPResponse) object from result (single object or collection) of activeresource call (methods : find, all, first, last, get )
+This gem adds possibility to access http response (Net::HTTPResponse) object from result (single object or collection) of activeresource call (methods : find, all, first, last, get )
 
 #### Why It can be used?
 Such functionallity can be used for easily implementing pagination in a REST API so that an ActiveResource client can navigate paginated results.
