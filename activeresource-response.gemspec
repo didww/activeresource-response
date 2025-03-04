@@ -13,7 +13,7 @@ Gem::Specification.new do |s|
   s.description = %q{This gem adds possibility to access http response object from result of ActiveResource::Base find method }
   s.license     = 'MIT'
 
-  s.add_runtime_dependency('activeresource', ['>= 3', '< 6.2'])
+  s.add_runtime_dependency('activeresource', ['>= 6.1', '< 6.2'])
   s.add_dependency "jruby-openssl" if RUBY_PLATFORM == "java"
   s.add_development_dependency "minitest"
   s.add_development_dependency 'rake'
