@@ -14,6 +14,7 @@ Gem::Specification.new do |s|
   s.license     = 'MIT'
 
   s.add_runtime_dependency('activeresource', ['>= 6.1', '< 6.3'])
+  s.add_dependency 'activesupport'
   s.add_dependency "jruby-openssl" if RUBY_PLATFORM == "java"
   s.add_development_dependency "minitest"
   s.add_development_dependency 'rake'
