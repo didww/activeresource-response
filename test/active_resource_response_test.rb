@@ -50,6 +50,8 @@ class ActiveResourceResponseTest < Minitest::Test
       mock.get "/streets/1/city.json", {}, @city.to_json, 200, {"X-total"=>'1'}
       mock.get "/streets/1.json", {}, @street.to_json, 200, {"X-total"=>'1'}
     end
+
+    ActiveResourceResponse::Connection::Current.reset
   end
 
 
@@ -115,7 +117,7 @@ class ActiveResourceResponseTest < Minitest::Test
   end
 
   def test_get_headers_from_find_when_404_custom_prefix
-    Status.all params: { country_id: 1 }
+    Status.all(params: { country_id: 1 }).to_a
     assert_equal Status.http_response.code, 404
   end
 

@@ -22,6 +22,18 @@
 #++
 module ActiveResourceResponse
   module Connection
+    class Current < ActiveSupport::CurrentAttributes
+      attribute :http_responses, default: {}
+
+      def http_response(klass)
+        http_responses[klass]
+      end
+
+      def set_http_response(klass, response)
+        http_responses[klass] = response
+      end
+    end
+
     def self.included(base)
       base.class_eval do
         alias_method :origin_handle_response, :handle_response
@@ -38,15 +50,11 @@ module ActiveResourceResponse
         end
 
         def http_response
-          http_storage[:ActiveResourceResponse]
+          Current.http_response(self.class)
         end
 
         def http_response=(response)
-          http_storage[:ActiveResourceResponse] = response
-        end
-
-        def http_storage
-          Thread.current
+          Current.set_http_response self.class, response
         end
       end
     end
