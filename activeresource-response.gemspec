@@ -12,6 +12,7 @@ Gem::Specification.new do |s|
   s.summary     = %q{activeresource extension}
   s.description = %q{This gem adds possibility to access http response object from result of ActiveResource::Base find method }
   s.license     = 'MIT'
+  s.required_ruby_version = '>= 3.3'
 
   s.add_runtime_dependency('activeresource', ['>= 6.1', '< 6.3'])
   s.add_dependency 'activesupport'
