@@ -30,11 +30,30 @@ module ActiveResourceResponse
       @_active_resource_response_headers
     end
 
+    # Attribute names CGI::Cookie::parse used to hand back alongside the real
+    # cookies. Kept as-is so the parsed result is unchanged.
+    IGNORED_COOKIE_KEYS = ['expires', 'path'].freeze
+
     def cookies
       unless defined? @_active_resource_response_cookies
-        @_active_resource_response_cookies = (self.headers[:set_cookie] || {}).inject({}) do |out, cookie_str|
-          CGI::Cookie::parse(cookie_str).each do |key, cookie|
-            out[key] = cookie.value.first unless ['expires', 'path'].include? key
+        @_active_resource_response_cookies = Array(self.headers[:set_cookie]).inject({}) do |out, cookie_str|
+          # This was CGI::Cookie::parse until Ruby 4.0 reduced the cgi stdlib to
+          # CGI::Escape, taking CGI::Cookie with it. The cgi gem still carries
+          # it below 0.5, but that pins a dependency to an API upstream removed
+          # on purpose -- and only the splitting was ever needed. CGI.unescape
+          # survives, so the parse lands here, matching cgi 0.5.2's
+          # CGI::Cookie.parse exactly: split on /;\s?/ (not on commas), skip
+          # pairs with no '=', leave the NAME escaped, unescape the value, and
+          # let the first occurrence of a repeated name win -- upstream
+          # concatenated values and this only ever read .value.first.
+          cookie_str.to_s.split(/;\s?/).each do |pair|
+            name, values = pair.split('=', 2)
+            next unless name && values
+            next if IGNORED_COOKIE_KEYS.include?(name)
+            next if out.key?(name)
+
+            value = values.split('&').first
+            out[name] = value && CGI.unescape(value)
           end
           out
         end

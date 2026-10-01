@@ -155,4 +155,32 @@ class ActiveResourceResponseTest < Minitest::Test
       assert street.class.respond_to?(:model_name)
   end
 
+  # Set-Cookie parsing used to be CGI::Cookie::parse, which Ruby 4.0 removed.
+  # These are the cases where a hand-rolled split can silently drift from it.
+  def test_cookie_parsing
+    assert_equal({ 'foo' => 'bar' }, parsed_cookies('foo=bar'))
+    # 'expires' and 'path' are attributes, not cookies
+    assert_equal({ 'foo' => 'bar' }, parsed_cookies('path=/; expires=Tue, 20-Jan-2015 15:03:14 GMT; foo=bar'))
+    # values are unescaped, names are not
+    assert_equal({ 'a%6Fb' => 'v/al' }, parsed_cookies('a%6Fb=v%2Fal'))
+    # first occurrence of a repeated name wins
+    assert_equal({ 'dup' => '1' }, parsed_cookies('dup=1; dup=2'))
+    # only the first of an '&'-joined value list is kept
+    assert_equal({ 'multi' => 'a' }, parsed_cookies('multi=a&b&c'))
+    # a pair with no '=' is skipped, an empty value yields nil
+    assert_equal({ 'z' => '9', 'empty' => nil }, parsed_cookies('noequals; z=9; empty='))
+    # commas do not separate cookies
+    assert_equal({ 'a' => '1, b=2' }, parsed_cookies('a=1, b=2'))
+    assert_equal({}, parsed_cookies(nil))
+  end
+
+  private
+
+  def parsed_cookies(set_cookie)
+    response = Object.new
+    response.define_singleton_method(:to_hash) { { 'Set-Cookie' => set_cookie && [set_cookie] } }
+    response.extend(ActiveResourceResponse::HttpResponse)
+    response.cookies
+  end
+
 end
